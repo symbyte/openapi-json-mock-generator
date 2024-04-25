@@ -12,7 +12,7 @@ export type CLIOptions = {
 const program = new Command();
 
 program
-  .name('openapi-json')
+  .name('openapi-json-mock-generator')
   .version(packageJson.version)
   .description('Generate mock data based on OpenAPI')
   .requiredOption(

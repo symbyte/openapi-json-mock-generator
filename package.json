@@ -1,6 +1,6 @@
 {
-    "name": "@7nohe/openapi-mock-json-generator",
-    "version": "0.1.1",
+    "name": "openapi-json-mock-generator",
+    "version": "1.0.0",
     "description": "Generate mock API responses from OpenAPI specification file",
     "main": "dist/cli.js",
     "module": "./dist/cli.mjs",
@@ -12,7 +12,7 @@
         }
     },
     "bin": {
-        "openapi-json": "./bin/cli.js"
+        "openapi-json-mock-generator": "./bin/cli.js"
     },
     "scripts": {
         "build": "tsup",
@@ -32,13 +32,13 @@
         "nock",
         "swagger"
     ],
-    "author": "Daiki Urata (@7nohe)",
+    "author": "Symbyte",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/7nohe/openapi-mock-json-generator.git"
+        "url": "git+https://github.com/symbyte/openapi-json-mock-generator.git"
     },
-    "homepage": "https://github.com/7nohe/openapi-mock-json-generator",
-    "bugs": "https://github.com/7nohe/openapi-mock-json-generator/issues",
+    "homepage": "https://github.com/symbyte/openapi-json-mock-generator",
+    "bugs": "https://github.com/symbyte/openapi-json-mock-generator/issues",
     "license": "MIT",
     "dependencies": {
         "@apidevtools/swagger-parser": "^10.1.0",
