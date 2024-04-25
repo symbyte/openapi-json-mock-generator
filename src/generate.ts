@@ -8,15 +8,11 @@ import { print } from "./print";
 
 
 export const generate = async (options: CLIOptions) => {
-  const { input, locale = "en", seed } = options;
+  const { input, seed } = options;
   const seedNumber = Number(seed);
   if (Number.isInteger(seedNumber)) {
     faker.seed(seedNumber);
   }
-  if (!faker.locales[locale]) {
-    throw new Error(`Locale ${locale} is not supported.`);
-  }
-  faker.locale = locale;
   const doc = await parse(input);
   const operations = getOperationDefinitions(doc);
   operations.forEach(operation => {
@@ -59,11 +55,12 @@ function getOperationDefinitions(
                 ...response,
                 code,
                 jsonContent:
-                  "content" in response &&
+                  "content" in response ?
                   resolveResponseContent(
                     v3Doc,
                     response?.content?.["application/json"]
                   ),
+                  : undefined,
               })
             ),
           }))

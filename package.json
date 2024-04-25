@@ -1,56 +1,56 @@
 {
-  "name": "@7nohe/openapi-mock-json-generator",
-  "version": "0.1.1",
-  "description": "Generate mock API responses from OpenAPI specification file",
-  "main": "dist/cli.js",
-  "module": "./dist/cli.mjs",
-  "exports": {
-    ".": {
-      "require": "./dist/cli.js",
-      "import": "./dist/cli.mjs",
-      "types": "./dist/cli.d.ts"
+    "name": "@7nohe/openapi-mock-json-generator",
+    "version": "0.1.1",
+    "description": "Generate mock API responses from OpenAPI specification file",
+    "main": "dist/cli.js",
+    "module": "./dist/cli.mjs",
+    "exports": {
+        ".": {
+            "require": "./dist/cli.js",
+            "import": "./dist/cli.mjs",
+            "types": "./dist/cli.d.ts"
+        }
+    },
+    "bin": {
+        "openapi-json": "./bin/cli.js"
+    },
+    "scripts": {
+        "build": "tsup",
+        "preview": "pnpm -w run build && node ./dist/cli.js --input ./example/petstore.yml --output ./example/mocks",
+        "prepublishOnly": "npm run build",
+        "release": "npx git-ensure -a && npx bumpp --commit --tag --push"
+    },
+    "keywords": [
+        "codegen",
+        "openapi",
+        "mock",
+        "json",
+        "faker",
+        "fakerjs",
+        "jest",
+        "msw",
+        "nock",
+        "swagger"
+    ],
+    "author": "Daiki Urata (@7nohe)",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/7nohe/openapi-mock-json-generator.git"
+    },
+    "homepage": "https://github.com/7nohe/openapi-mock-json-generator",
+    "bugs": "https://github.com/7nohe/openapi-mock-json-generator/issues",
+    "license": "MIT",
+    "dependencies": {
+        "@apidevtools/swagger-parser": "^10.1.0",
+        "@faker-js/faker": "^8.0.0",
+        "commander": "^9.4.0",
+        "lodash": "^4.17.21",
+        "typescript": "^4.7.4"
+    },
+    "devDependencies": {
+        "openapi-types": "^12.0.0",
+        "@types/lodash": "^4.14.182",
+        "@types/node": "^18.6.2",
+        "tsup": "^6.2.0"
     }
-  },
-  "bin": {
-    "openapi-json": "./bin/cli.js"
-  },
-  "scripts": {
-    "build": "tsup",
-    "preview": "pnpm -w run build && node ./dist/cli.js --input ./example/petstore.yml --output ./example/mocks",
-    "prepublishOnly": "npm run build",
-    "release": "npx git-ensure -a && npx bumpp --commit --tag --push"
-  },
-  "keywords": [
-    "codegen",
-    "openapi",
-    "mock",
-    "json",
-    "faker",
-    "fakerjs",
-    "jest",
-    "msw",
-    "nock",
-    "swagger"
-  ],
-  "author": "Daiki Urata (@7nohe)",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/7nohe/openapi-mock-json-generator.git"
-  },
-  "homepage": "https://github.com/7nohe/openapi-mock-json-generator",
-  "bugs": "https://github.com/7nohe/openapi-mock-json-generator/issues",
-  "license": "MIT",
-  "dependencies": {
-    "@apidevtools/swagger-parser": "^10.1.0",
-    "@faker-js/faker": "^7.3.0",
-    "commander": "^9.4.0",
-    "lodash": "^4.17.21",
-    "typescript": "^4.7.4"
-  },
-  "devDependencies": {
-    "openapi-types": "^12.0.0",
-    "@types/lodash": "^4.14.182",
-    "@types/node": "^18.6.2",
-    "tsup": "^6.2.0"
-  }
 }

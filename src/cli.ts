@@ -1,13 +1,11 @@
 import { generate } from "./generate";
 import { Command } from "commander";
 import packageJson from "../package.json";
-import type { UsableLocale } from "@faker-js/faker";
 
 export type CLIOptions = {
   input: string;
   output: string;
   maxArrayLength?: number;
-  locale?: UsableLocale;
   seed?: number;
 };
 
