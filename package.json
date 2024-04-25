@@ -44,13 +44,13 @@
         "@apidevtools/swagger-parser": "^10.1.0",
         "@faker-js/faker": "^8.0.0",
         "commander": "^9.4.0",
-        "lodash": "^4.17.21",
-        "typescript": "^4.7.4"
+        "lodash": "^4.17.21"
     },
     "devDependencies": {
         "openapi-types": "^12.0.0",
         "@types/lodash": "^4.14.182",
         "@types/node": "^18.6.2",
-        "tsup": "^6.2.0"
+        "tsup": "^6.2.0",
+        "typescript": "^4.7.4"
     }
 }
