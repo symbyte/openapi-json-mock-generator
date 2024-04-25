@@ -81,7 +81,7 @@ function transformStringBasedOnFormat(format?: string, key?: string) {
     ['date-time', 'date', 'time'].includes(format ?? '') ||
     key?.toLowerCase().endsWith('_at')
   ) {
-    return faker.date.past();
+    return faker.date.past({ refDate: '01/01/2020' });
   } else if (format === 'uuid') {
     return faker.datatype.uuid();
   } else if (
