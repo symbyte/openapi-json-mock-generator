@@ -1,14 +1,14 @@
-import { faker } from "@faker-js/faker";
-import { OpenAPIV3 } from "openapi-types";
-import { CLIOptions } from "./cli";
+import { faker } from '@faker-js/faker';
+import { OpenAPIV3 } from 'openapi-types';
+import { CLIOptions } from './cli';
 
 export function transformJSONSchemaToFakerJson(
   options: CLIOptions,
   jsonSchema?: OpenAPIV3.SchemaObject,
-  key?: string
+  key?: string,
 ): string {
   if (!jsonSchema) {
-    return "{}";
+    return '{}';
   }
 
   if (jsonSchema.example) {
@@ -20,26 +20,26 @@ export function transformJSONSchemaToFakerJson(
   }
 
   switch (jsonSchema.type) {
-    case "string":
+    case 'string':
       return `"${transformStringBasedOnFormat(jsonSchema.format, key)}"`;
-    case "number":
+    case 'number':
       return `"${faker.datatype.number()}"`;
-    case "integer":
+    case 'integer':
       return `"${faker.datatype.number()}"`;
-    case "boolean":
+    case 'boolean':
       return `"${faker.datatype.boolean()}"`;
-    case "object":
+    case 'object':
       if (
         !jsonSchema.properties &&
-        typeof jsonSchema.additionalProperties === "object"
+        typeof jsonSchema.additionalProperties === 'object'
       ) {
-        const keys = [...new Array(Number(options.maxArrayLength)).keys()]
+        const keys = [...new Array(Number(options.maxArrayLength)).keys()];
         const result = `{${keys.map(
           (index) =>
             `"${faker.lorem.word()}-${index}": ${transformJSONSchemaToFakerJson(
               options,
-              jsonSchema.additionalProperties as OpenAPIV3.SchemaObject
-            )}`
+              jsonSchema.additionalProperties as OpenAPIV3.SchemaObject,
+            )}`,
         )}}`;
         return result;
       }
@@ -49,27 +49,27 @@ export function transformJSONSchemaToFakerJson(
           return `${JSON.stringify(k)}: ${transformJSONSchemaToFakerJson(
             options,
             v as OpenAPIV3.SchemaObject,
-            k
+            k,
           )}`;
         })
-        .join(",\n")}}`;
-    case "array":
+        .join(',\n')}}`;
+    case 'array':
       return (
-        "[" +
+        '[' +
         [
           ...new Array(
-            faker.datatype.number({ max: options.maxArrayLength })
+            faker.datatype.number({ max: options.maxArrayLength }),
           ).keys(),
         ].map((_) =>
           transformJSONSchemaToFakerJson(
             options,
-            jsonSchema.items as OpenAPIV3.SchemaObject
-          )
+            jsonSchema.items as OpenAPIV3.SchemaObject,
+          ),
         ) +
-        "]"
+        ']'
       );
     default:
-      return "null";
+      return 'null';
   }
 }
 
@@ -78,31 +78,31 @@ export function transformJSONSchemaToFakerJson(
  */
 function transformStringBasedOnFormat(format?: string, key?: string) {
   if (
-    ["date-time", "date", "time"].includes(format ?? "") ||
-    key?.toLowerCase().endsWith("_at")
+    ['date-time', 'date', 'time'].includes(format ?? '') ||
+    key?.toLowerCase().endsWith('_at')
   ) {
     return faker.date.past();
-  } else if (format === "uuid") {
+  } else if (format === 'uuid') {
     return faker.datatype.uuid();
   } else if (
-    ["idn-email", "email"].includes(format ?? "") ||
-    key?.toLowerCase().endsWith("email")
+    ['idn-email', 'email'].includes(format ?? '') ||
+    key?.toLowerCase().endsWith('email')
   ) {
     return faker.internet.email();
-  } else if (["hostname", "idn-hostname"].includes(format ?? "")) {
+  } else if (['hostname', 'idn-hostname'].includes(format ?? '')) {
     return faker.internet.domainName();
-  } else if (format === "ipv4") {
+  } else if (format === 'ipv4') {
     return faker.internet.ip();
-  } else if (format === "ipv6") {
+  } else if (format === 'ipv6') {
     return faker.internet.ipv6();
   } else if (
-    ["uri", "uri-reference", "iri", "iri-reference", "uri-template"].includes(
-      format ?? ""
+    ['uri', 'uri-reference', 'iri', 'iri-reference', 'uri-template'].includes(
+      format ?? '',
     ) ||
-    key?.toLowerCase().endsWith("url")
+    key?.toLowerCase().endsWith('url')
   ) {
     return faker.internet.url();
-  } else if (key?.toLowerCase().endsWith("name")) {
+  } else if (key?.toLowerCase().endsWith('name')) {
     return faker.name.fullName();
   } else {
     return faker.lorem.slug(1);

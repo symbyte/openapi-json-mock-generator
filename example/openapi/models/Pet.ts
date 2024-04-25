@@ -4,7 +4,6 @@
 
 import type { NewPet } from './NewPet';
 
-export type Pet = (NewPet & {
-    hoge?: number;
-});
-
+export type Pet = NewPet & {
+  hoge?: number;
+};

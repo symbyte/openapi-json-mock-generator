@@ -3,7 +3,6 @@
 /* eslint-disable */
 
 export type NewPet = {
-    name: string;
-    tag?: string;
+  name: string;
+  tag?: string;
 };
-
