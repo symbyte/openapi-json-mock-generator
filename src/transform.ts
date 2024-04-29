@@ -2,11 +2,13 @@ import { faker } from '@faker-js/faker';
 import { OpenAPIV3 } from 'openapi-types';
 import { CLIOptions } from './cli';
 
+type JsonCompatiblePrimitive = string | number | boolean;
+
 export function transformJSONSchemaToFakerJson(
   options: CLIOptions,
   jsonSchema?: OpenAPIV3.SchemaObject,
   key?: string,
-): string {
+): JsonCompatiblePrimitive {
   if (!jsonSchema) {
     return '{}';
   }
@@ -23,11 +25,11 @@ export function transformJSONSchemaToFakerJson(
     case 'string':
       return `"${transformStringBasedOnFormat(jsonSchema.format, key)}"`;
     case 'number':
-      return `"${faker.number.float()}"`;
+      return faker.number.float();
     case 'integer':
-      return `"${faker.number.int()}"`;
+      return faker.number.int();
     case 'boolean':
-      return `"${faker.datatype.boolean()}"`;
+      return faker.datatype.boolean();
     case 'object':
       if (
         !jsonSchema.properties &&
