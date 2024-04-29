@@ -23,9 +23,9 @@ export function transformJSONSchemaToFakerJson(
     case 'string':
       return `"${transformStringBasedOnFormat(jsonSchema.format, key)}"`;
     case 'number':
-      return `"${faker.datatype.number()}"`;
+      return `"${faker.number.float()}"`;
     case 'integer':
-      return `"${faker.datatype.number()}"`;
+      return `"${faker.number.int()}"`;
     case 'boolean':
       return `"${faker.datatype.boolean()}"`;
     case 'object':
@@ -58,7 +58,7 @@ export function transformJSONSchemaToFakerJson(
         '[' +
         [
           ...new Array(
-            faker.datatype.number({ max: options.maxArrayLength }),
+            faker.number.int({ max: options.maxArrayLength }),
           ).keys(),
         ].map((_) =>
           transformJSONSchemaToFakerJson(
@@ -83,7 +83,7 @@ function transformStringBasedOnFormat(format?: string, key?: string) {
   ) {
     return faker.date.past({ refDate: '01/01/2020' });
   } else if (format === 'uuid') {
-    return faker.datatype.uuid();
+    return faker.string.uuid();
   } else if (
     ['idn-email', 'email'].includes(format ?? '') ||
     key?.toLowerCase().endsWith('email')
@@ -103,7 +103,7 @@ function transformStringBasedOnFormat(format?: string, key?: string) {
   ) {
     return faker.internet.url();
   } else if (key?.toLowerCase().endsWith('name')) {
-    return faker.name.fullName();
+    return faker.person.fullName();
   } else {
     return faker.lorem.slug(1);
   }
