@@ -25,9 +25,9 @@ export function transformJSONSchemaToFakerJson(
     case 'string':
       return `"${transformStringBasedOnFormat(jsonSchema.format, key)}"`;
     case 'number':
-      return faker.number.float();
+      return faker.number.float({min: 0, max: 50, fractionDigits: 2 });
     case 'integer':
-      return faker.number.int();
+      return faker.number.int({min: 0, max: 50000 });
     case 'boolean':
       return faker.datatype.boolean();
     case 'object':
