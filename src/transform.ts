@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { OpenAPIV3 } from 'openapi-types';
 import { CLIOptions } from './cli';
 
-type JsonCompatiblePrimitive = string | number | boolean;
+export type JsonCompatiblePrimitive = string | number | boolean;
 
 export function transformJSONSchemaToFakerJson(
   options: CLIOptions,
