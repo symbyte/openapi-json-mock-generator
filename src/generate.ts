@@ -150,6 +150,7 @@ function recursiveResolveSchema(
             },
             {} as Record<string, OpenAPIV3.SchemaObject>
         );
+        resolvedSchema.type = 'object'
     }
 
     return resolvedSchema;
