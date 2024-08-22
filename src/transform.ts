@@ -60,7 +60,7 @@ export function transformJSONSchemaToFakerJson(
         '[' +
         [
           ...new Array(
-            faker.number.int({ max: options.maxArrayLength }),
+            faker.number.int({ max: options.maxArrayLength, min: 10 }),
           ).keys(),
         ].map((_) =>
           transformJSONSchemaToFakerJson(
