@@ -1,6 +1,6 @@
 {
     "name": "openapi-json-mock-generator",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Generate mock API responses from OpenAPI specification file",
     "main": "dist/cli.js",
     "module": "./dist/cli.mjs",
