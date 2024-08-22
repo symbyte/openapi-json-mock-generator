@@ -89,64 +89,70 @@ function recursiveResolveSchema(
   v3Doc: OpenAPIV3.Document,
   schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject,
 ) {
-  let resolvedSchema =
-    '$ref' in schema
-      ? (getReference(v3Doc, schema.$ref) as OpenAPIV3.SchemaObject)
-      : schema;
+    let resolvedSchema =
+        '$ref' in schema
+            ? (getReference(v3Doc, schema.$ref) as OpenAPIV3.SchemaObject)
+            : schema;
 
-  // Convert allOf keyword object to 'array' type object
-  if (resolvedSchema.allOf) {
-    resolvedSchema.allOf = resolvedSchema.allOf.map((item) =>
-      recursiveResolveSchema(v3Doc, item),
-    ) as OpenAPIV3.SchemaObject[];
+    // Convert allOf keyword object to 'array' type object
+    if (resolvedSchema.allOf) {
+        resolvedSchema.allOf = resolvedSchema.allOf.map((item) =>
+            recursiveResolveSchema(v3Doc, item)
+        ) as OpenAPIV3.SchemaObject[];
 
-    resolvedSchema = {
-      type: 'object',
-      ...(resolvedSchema.allOf as OpenAPIV3.SchemaObject[]).reduce(
-        (resolved, item) => _.merge(resolved, item),
-        {},
-      ),
-    };
-  }
-
-  // Resolve 'array' type
-  if (resolvedSchema.type === 'array') {
-    resolvedSchema.items =
-      '$ref' in resolvedSchema.items
-        ? getReference(v3Doc, resolvedSchema.items.$ref)
-        : resolvedSchema.items;
-    resolvedSchema.items = recursiveResolveSchema(v3Doc, resolvedSchema.items);
-  }
-
-  // Resolve 'object' type
-  if (resolvedSchema.type === 'object') {
-    if (
-      !resolvedSchema.properties &&
-      typeof resolvedSchema.additionalProperties === 'object'
-    ) {
-      if ('$ref' in resolvedSchema.additionalProperties) {
-        resolvedSchema.additionalProperties = recursiveResolveSchema(
-          v3Doc,
-          getReference(v3Doc, resolvedSchema.additionalProperties.$ref),
-        );
-      }
+        resolvedSchema = {
+            type: 'object',
+            ...(resolvedSchema.allOf as OpenAPIV3.SchemaObject[]).reduce(
+                (resolved, item) => _.merge(resolved, item),
+                {}
+            )
+        };
     }
+
+    // Resolve 'array' type
+    if (resolvedSchema.type === 'array') {
+        resolvedSchema.items =
+            '$ref' in resolvedSchema.items
+                ? getReference(v3Doc, resolvedSchema.items.$ref)
+                : resolvedSchema.items;
+        resolvedSchema.items = recursiveResolveSchema(
+            v3Doc,
+            resolvedSchema.items
+        );
+    }
+
+    // Resolve 'object' type
+    if (resolvedSchema.type === 'object') {
+        if (
+            !resolvedSchema.properties &&
+            typeof resolvedSchema.additionalProperties === 'object'
+        ) {
+            if ('$ref' in resolvedSchema.additionalProperties) {
+                resolvedSchema.additionalProperties = recursiveResolveSchema(
+                    v3Doc,
+                    getReference(
+                        v3Doc,
+                        resolvedSchema.additionalProperties.$ref
+                    )
+                );
+            }
+        }
+    }
+
     // Resolve 'object' type properties
     if (resolvedSchema.properties) {
         resolvedSchema.properties = Object.entries(
-        resolvedSchema.properties,
+            resolvedSchema.properties
         ).reduce(
-        (resolved, [key, value]) => {
-            resolved[key] = recursiveResolveSchema(v3Doc, value);
-            return resolved;
-        },
-        {} as Record<string, OpenAPIV3.SchemaObject>,
+            (resolved, [key, value]) => {
+                resolved[key] = recursiveResolveSchema(v3Doc, value);
+                return resolved;
+            },
+            {} as Record<string, OpenAPIV3.SchemaObject>
         );
     }
-  }
 
-
-  return resolvedSchema;
+    return resolvedSchema;
 }
 
 export function getReference(spec: any, ref: string) {
