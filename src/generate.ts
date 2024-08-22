@@ -12,6 +12,8 @@ export const generate = async (options: CLIOptions) => {
   if (Number.isInteger(seedNumber)) {
     faker.seed(seedNumber);
   }
+
+  faker.setDefaultRefDate(new Date('01/01/2020'))
   const doc = await parse(input);
   const operations = getOperationDefinitions(doc);
   operations.forEach((operation) => {
@@ -91,6 +93,22 @@ function recursiveResolveSchema(
     '$ref' in schema
       ? (getReference(v3Doc, schema.$ref) as OpenAPIV3.SchemaObject)
       : schema;
+
+  // Convert allOf keyword object to 'array' type object
+  if (resolvedSchema.allOf) {
+    resolvedSchema.allOf = resolvedSchema.allOf.map((item) =>
+      recursiveResolveSchema(v3Doc, item),
+    ) as OpenAPIV3.SchemaObject[];
+
+    resolvedSchema = {
+      type: 'object',
+      ...(resolvedSchema.allOf as OpenAPIV3.SchemaObject[]).reduce(
+        (resolved, item) => _.merge(resolved, item),
+        {},
+      ),
+    };
+  }
+
   // Resolve 'array' type
   if (resolvedSchema.type === 'array') {
     resolvedSchema.items =
@@ -113,35 +131,21 @@ function recursiveResolveSchema(
         );
       }
     }
-
     // Resolve 'object' type properties
     if (resolvedSchema.properties) {
-      resolvedSchema.properties = Object.entries(
+        resolvedSchema.properties = Object.entries(
         resolvedSchema.properties,
-      ).reduce(
+        ).reduce(
         (resolved, [key, value]) => {
-          resolved[key] = recursiveResolveSchema(v3Doc, value);
-          return resolved;
+            resolved[key] = recursiveResolveSchema(v3Doc, value);
+            return resolved;
         },
         {} as Record<string, OpenAPIV3.SchemaObject>,
-      );
+        );
     }
   }
 
-  // Convert allOf keyword object to 'array' type object
-  if (resolvedSchema.allOf) {
-    resolvedSchema.allOf = resolvedSchema.allOf.map((item) =>
-      recursiveResolveSchema(v3Doc, item),
-    ) as OpenAPIV3.SchemaObject[];
 
-    resolvedSchema = {
-      type: 'object',
-      ...(resolvedSchema.allOf as OpenAPIV3.SchemaObject[]).reduce(
-        (resolved, item) => _.merge(resolved, item),
-        {},
-      ),
-    };
-  }
   return resolvedSchema;
 }
 
